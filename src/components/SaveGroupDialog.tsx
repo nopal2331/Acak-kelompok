@@ -1,41 +1,53 @@
 import React, { useState } from 'react';
-import { Dialog } from './ui/dialog';
-import { Input } from './ui/input';
-import { Button } from './ui/button';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 interface SaveGroupDialogProps {
   open: boolean;
-  onClose: () => void;
+  onOpenChange: (open: boolean) => void;
   onSave: (name: string) => void;
 }
 
-const SaveGroupDialog: React.FC<SaveGroupDialogProps> = ({ open, onClose, onSave }) => {
+const SaveGroupDialog: React.FC<SaveGroupDialogProps> = ({ open, onOpenChange, onSave }) => {
   const [groupName, setGroupName] = useState('');
 
   const handleSave = () => {
-    if (groupName.trim()) {
-      onSave(groupName);
-      setGroupName('');
-      onClose();
-    }
+    if (!groupName.trim()) return;
+    onSave(groupName.trim());
+    setGroupName('');
   };
 
   return (
-    <Dialog open={open} onOpenChange={onClose}>
-      <h2 className="text-lg font-bold mb-4 text-black">Simpan Kelompok</h2>
-      <Input
-        placeholder="Nama kelompok"
-        value={groupName}
-        onChange={(e) => setGroupName(e.target.value)}
-      />
-      <div className="mt-4 flex justify-end space-x-2">
-        <Button variant="ghost" onClick={onClose}>
-          Batal
-        </Button>
-        <Button onClick={handleSave}>Simpan</Button>
-      </div>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Simpan Kelompok</DialogTitle>
+          <DialogDescription>
+            Berikan nama untuk menyimpan pembagian kelompok ini
+          </DialogDescription>
+        </DialogHeader>
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="groupName">Nama Kelompok</Label>
+            <Input
+              id="groupName"
+              placeholder="Contoh: Kelompok Diskusi Sesi 1"
+              value={groupName}
+              onChange={(e) => setGroupName(e.target.value)}
+            />
+          </div>
+        </div>
+        <DialogFooter>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
+            Batal
+          </Button>
+          <Button onClick={handleSave}>Simpan</Button>
+        </DialogFooter>
+      </DialogContent>
     </Dialog>
   );
 };
 
-export default SaveGroupDialog;
+export { SaveGroupDialog };

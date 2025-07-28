@@ -1,22 +1,37 @@
 import React from 'react';
-import { Button } from './ui/button';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Download, Upload } from 'lucide-react';
 
 interface DataManagementProps {
-  onClearPeople: () => void;
-  onClearGroups: () => void;
+  onExport: () => void;
+  onImport: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const DataManagement: React.FC<DataManagementProps> = ({ onClearPeople, onClearGroups }) => {
+const DataManagement: React.FC<DataManagementProps> = ({ onExport, onImport }) => {
   return (
-    <div className="flex gap-4 mt-6">
-      <Button variant="destructive" onClick={onClearPeople}>
-        Hapus Semua Orang
+    <div className="flex flex-wrap gap-2">
+      <Button onClick={onExport} variant="outline">
+        <Download className="h-4 w-4 mr-2" />
+        Export Data
       </Button>
-      <Button variant="destructive" onClick={onClearGroups}>
-        Hapus Semua Kelompok
-      </Button>
+      <Label htmlFor="import" className="cursor-pointer">
+        <Button asChild variant="outline">
+          <span>
+            <Upload className="h-4 w-4 mr-2" />
+            Import Data
+          </span>
+        </Button>
+      </Label>
+      <input
+        id="import"
+        type="file"
+        accept=".json"
+        className="hidden"
+        onChange={onImport}
+      />
     </div>
   );
 };
 
-export default DataManagement;
+export { DataManagement };
